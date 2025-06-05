@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+    #quiz {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #aaa;
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz">
+    <h2 id="question">Loading...</h2>
+    <div id="answers"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      { q: "What is the capital of France?", a: ["Paris", "Berlin", "Madrid", "Rome"], correct: "Paris" },
+      { q: "2 + 2 = ?", a: ["3", "4", "5", "2"], correct: "4" },
+      { q: "HTML stands for?", a: ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Tool Marking Logic"], correct: "Hyper Text Markup Language" },
+      { q: "What is the capital of India?", a: ["Mumbai", "New Delhi", "Chennai", "Kolkata"], correct: "New Delhi" },
+      { q: "Which planet is known as the Red Planet?", a: ["Earth", "Mars", "Venus", "Jupiter"], correct: "Mars" },
+      { q: "Who wrote 'Romeo and Juliet'?", a: ["William Wordsworth", "William Shakespeare", "John Keats", "Charles Dickens"], correct: "William Shakespeare" },
+      { q: "What is the boiling point of water?", a: ["90°C", "80°C", "100°C", "120°C"], correct: "100°C" }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const resultEl = document.getElementById('result');
+
+    function loadQuestion() {
+      const q = quizData[current];
+      questionEl.textContent = `Q${current + 1}. ${q.q}`;
+      answersEl.innerHTML = '';
+      q.a.forEach(answer => {
+        const btn = document.createElement('button');
+        btn.textContent = answer;
+        btn.className = 'btn';
+        btn.onclick = () => {
+          if (answer === q.correct) {
+            score++;
+            resultEl.textContent = '✅ Correct!';
+          } else {
+            resultEl.textContent = '❌ Wrong!';
+          }
+          setTimeout(() => {
+            resultEl.textContent = '';
+            current++;
+            if (current < quizData.length) {
+              loadQuestion();
+            } else {
+              showScore();
+            }
+          }, 1000);
+        };
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function showScore() {
+      questionEl.textContent = "🎉 Quiz Completed!";
+      answersEl.innerHTML = `<p>Your Score: ${score} out of ${quizData.length}</p>`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
